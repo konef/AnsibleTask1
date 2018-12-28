@@ -1,0 +1,3 @@
+---
+# vars file for nginx
+conf_path: /etc/nginx/sites-available

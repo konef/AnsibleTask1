@@ -1,0 +1,14 @@
+---
+# tasks file for java_test
+- name: copy hello world file
+  copy:
+    src: HelloWorld.java
+    dest: /home/vagrant/
+  become: yes
+- name: compile
+  shell: javac /home/vagrant/HelloWorld.java
+- name: test
+  shell: java HelloWorld
+  register: test_java_file
+- debug:
+    msg: "{{ test_java_file.stdout }}"

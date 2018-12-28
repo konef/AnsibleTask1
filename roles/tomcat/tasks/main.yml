@@ -1,0 +1,64 @@
+---
+- name: copy tomcat service file
+  copy: src=tomcat.service dest={{ service_path }}/tomcat.service
+  become: yes
+  become_user: root
+  notify:
+    - restart tomcat  
+
+- name: execeuteble tomcat file
+  shell: sudo chmod 755 {{ service_path }}/tomcat.service
+
+- name: download tar archive Tomcat
+  get_url:
+    url: http://apache-mirror.rbc.ru/pub/apache/tomcat/tomcat-9/v9.0.14/bin/apache-tomcat-9.0.14.tar.gz
+    dest: /opt
+  become: yes
+  become_user: root
+
+- name: unpack tomcat archive
+  unarchive:
+    src: /opt/apache-tomcat-9.0.14.tar.gz
+    dest: /opt
+    remote_src: yes
+  become: yes
+  become_user: root
+
+- name: rename tomcat dir
+  shell: mv /opt/apache-tomcat-9.0.14 /opt/tomcat
+  become: yes
+  become_user: root
+
+- name: create group tomcat
+  group:
+    name: tomcat
+    state: present
+  become: yes
+  become_user: root
+
+- name: create user tomcat
+  user:
+    name: tomcat
+    group: tomcat
+    shell: /bin/false
+    home: /opt/tomcat
+  become: yes
+  become_user: root
+
+- name: ownership
+  raw: sudo chown -R tomcat /opt/tomcat
+
+- name: restart deamon
+  shell: sudo systemctl daemon-reload
+
+- name: start tomcat
+  service: name=tomcat state=started enabled=yes
+  become: yes
+  become_user: root
+- name: status tomcat
+  command: sudo systemctl status tomcat
+  register: status_tomcat
+- debug:
+    msg: "{{ status_tomcat.stdout }}"
+  
+  

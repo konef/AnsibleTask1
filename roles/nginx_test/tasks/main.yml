@@ -1,0 +1,14 @@
+---
+# tasks file for nginx_test
+- name: test nginx
+  shell: sudo systemctl status nginx
+  register: status_nginx
+
+- debug:
+    msg: "{{ status_nginx }}"
+
+- name: test nginx2
+  shell: curl localhost
+  register: status_nginx2
+- debug:
+    msg: "{{ status_nginx2 }}"

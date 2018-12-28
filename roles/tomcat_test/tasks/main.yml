@@ -1,0 +1,8 @@
+---
+# tasks file for tomcat_test
+- name: test tomcat
+  shell: curl http://localhost:8080
+  register: stat_tomcat
+
+- debug:
+    msg: "{{ stat_tomcat.stdout }}"  

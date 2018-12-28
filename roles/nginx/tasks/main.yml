@@ -1,0 +1,22 @@
+---
+- name: install nginx
+  apt:
+    name: nginx
+  become: yes
+  become_user: root
+
+- name: run nginx
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: copy template conf nginx
+  template:
+    src: default.j2
+    dest: "{{ conf_path }}/default"
+  become: yes
+  become_user: root
+  notify:
+    - restart nginx
+

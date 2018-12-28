@@ -1,0 +1,3 @@
+---
+# vars file for tomcat
+service_path: /etc/systemd/system
